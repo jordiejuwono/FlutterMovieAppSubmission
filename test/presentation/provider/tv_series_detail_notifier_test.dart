@@ -7,7 +7,7 @@ import 'package:ditonton/domain/usecases/get_tv_series_recommendations.dart';
 import 'package:ditonton/domain/usecases/get_tv_series_watchlist_status.dart';
 import 'package:ditonton/domain/usecases/remove_tv_series_watchlist.dart';
 import 'package:ditonton/domain/usecases/save_tv_series_watchlist.dart';
-import 'package:ditonton/presentation/provider/tv_series_detail_notifier.dart';
+import 'package:ditonton/presentation/bloc/tv_series_detail_notifier.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

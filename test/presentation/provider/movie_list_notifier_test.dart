@@ -4,8 +4,8 @@ import 'package:ditonton/domain/usecases/get_now_playing_movies.dart';
 import 'package:ditonton/common/failure.dart';
 import 'package:ditonton/domain/usecases/get_popular_movies.dart';
 import 'package:ditonton/domain/usecases/get_top_rated_movies.dart';
-import 'package:ditonton/presentation/provider/movie_list_notifier.dart';
 import 'package:ditonton/common/state_enum.dart';
+import 'package:ditonton/presentation/bloc/movie_list/movie_list_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -14,24 +14,20 @@ import 'movie_list_notifier_test.mocks.dart';
 
 @GenerateMocks([GetNowPlayingMovies, GetPopularMovies, GetTopRatedMovies])
 void main() {
-  late MovieListNotifier provider;
+  late MovieListCubit bloc;
   late MockGetNowPlayingMovies mockGetNowPlayingMovies;
   late MockGetPopularMovies mockGetPopularMovies;
   late MockGetTopRatedMovies mockGetTopRatedMovies;
-  late int listenerCallCount;
 
   setUp(() {
-    listenerCallCount = 0;
     mockGetNowPlayingMovies = MockGetNowPlayingMovies();
     mockGetPopularMovies = MockGetPopularMovies();
     mockGetTopRatedMovies = MockGetTopRatedMovies();
-    provider = MovieListNotifier(
+    bloc = MovieListCubit(
       getNowPlayingMovies: mockGetNowPlayingMovies,
       getPopularMovies: mockGetPopularMovies,
       getTopRatedMovies: mockGetTopRatedMovies,
-    )..addListener(() {
-        listenerCallCount += 1;
-      });
+    );
   });
 
   final tMovie = Movie(
@@ -53,7 +49,7 @@ void main() {
 
   group('now playing movies', () {
     test('initialState should be Empty', () {
-      expect(provider.nowPlayingState, equals(RequestState.Empty));
+      expect(bloc.state.nowPlayingState, equals(RequestState.Empty));
     });
 
     test('should get data from the usecase', () async {
@@ -61,7 +57,7 @@ void main() {
       when(mockGetNowPlayingMovies.execute())
           .thenAnswer((_) async => Right(tMovieList));
       // act
-      provider.fetchNowPlayingMovies();
+      bloc.fetchNowPlayingMovies();
       // assert
       verify(mockGetNowPlayingMovies.execute());
     });
@@ -71,9 +67,9 @@ void main() {
       when(mockGetNowPlayingMovies.execute())
           .thenAnswer((_) async => Right(tMovieList));
       // act
-      provider.fetchNowPlayingMovies();
+      bloc.fetchNowPlayingMovies();
       // assert
-      expect(provider.nowPlayingState, RequestState.Loading);
+      expect(bloc.state.nowPlayingState, RequestState.Loading);
     });
 
     test('should change movies when data is gotten successfully', () async {
@@ -81,11 +77,10 @@ void main() {
       when(mockGetNowPlayingMovies.execute())
           .thenAnswer((_) async => Right(tMovieList));
       // act
-      await provider.fetchNowPlayingMovies();
+      await bloc.fetchNowPlayingMovies();
       // assert
-      expect(provider.nowPlayingState, RequestState.Loaded);
-      expect(provider.nowPlayingMovies, tMovieList);
-      expect(listenerCallCount, 2);
+      expect(bloc.state.nowPlayingState, RequestState.Loaded);
+      expect(bloc.state.nowPlayingList, tMovieList);
     });
 
     test('should return error when data is unsuccessful', () async {
@@ -93,11 +88,9 @@ void main() {
       when(mockGetNowPlayingMovies.execute())
           .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
       // act
-      await provider.fetchNowPlayingMovies();
+      await bloc.fetchNowPlayingMovies();
       // assert
-      expect(provider.nowPlayingState, RequestState.Error);
-      expect(provider.message, 'Server Failure');
-      expect(listenerCallCount, 2);
+      expect(bloc.state.nowPlayingState, RequestState.Error);
     });
   });
 
@@ -107,10 +100,9 @@ void main() {
       when(mockGetPopularMovies.execute())
           .thenAnswer((_) async => Right(tMovieList));
       // act
-      provider.fetchPopularMovies();
+      bloc.fetchPopularMovies();
       // assert
-      expect(provider.popularMoviesState, RequestState.Loading);
-      // verify(provider.setState(RequestState.Loading));
+      expect(bloc.state.popularState, RequestState.Loading);
     });
 
     test('should change movies data when data is gotten successfully',
@@ -119,11 +111,10 @@ void main() {
       when(mockGetPopularMovies.execute())
           .thenAnswer((_) async => Right(tMovieList));
       // act
-      await provider.fetchPopularMovies();
+      await bloc.fetchPopularMovies();
       // assert
-      expect(provider.popularMoviesState, RequestState.Loaded);
-      expect(provider.popularMovies, tMovieList);
-      expect(listenerCallCount, 2);
+      expect(bloc.state.popularState, RequestState.Loaded);
+      expect(bloc.state.popularList, tMovieList);
     });
 
     test('should return error when data is unsuccessful', () async {
@@ -131,11 +122,9 @@ void main() {
       when(mockGetPopularMovies.execute())
           .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
       // act
-      await provider.fetchPopularMovies();
+      await bloc.fetchPopularMovies();
       // assert
-      expect(provider.popularMoviesState, RequestState.Error);
-      expect(provider.message, 'Server Failure');
-      expect(listenerCallCount, 2);
+      expect(bloc.state.popularState, RequestState.Error);
     });
   });
 
@@ -145,9 +134,9 @@ void main() {
       when(mockGetTopRatedMovies.execute())
           .thenAnswer((_) async => Right(tMovieList));
       // act
-      provider.fetchTopRatedMovies();
+      bloc.fetchTopRatedMovies();
       // assert
-      expect(provider.topRatedMoviesState, RequestState.Loading);
+      expect(bloc.state.topRatedState, RequestState.Loading);
     });
 
     test('should change movies data when data is gotten successfully',
@@ -156,11 +145,10 @@ void main() {
       when(mockGetTopRatedMovies.execute())
           .thenAnswer((_) async => Right(tMovieList));
       // act
-      await provider.fetchTopRatedMovies();
+      await bloc.fetchTopRatedMovies();
       // assert
-      expect(provider.topRatedMoviesState, RequestState.Loaded);
-      expect(provider.topRatedMovies, tMovieList);
-      expect(listenerCallCount, 2);
+      expect(bloc.state.topRatedState, RequestState.Loaded);
+      expect(bloc.state.topRatedList, tMovieList);
     });
 
     test('should return error when data is unsuccessful', () async {
@@ -168,11 +156,9 @@ void main() {
       when(mockGetTopRatedMovies.execute())
           .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
       // act
-      await provider.fetchTopRatedMovies();
+      await bloc.fetchTopRatedMovies();
       // assert
-      expect(provider.topRatedMoviesState, RequestState.Error);
-      expect(provider.message, 'Server Failure');
-      expect(listenerCallCount, 2);
+      expect(bloc.state.topRatedState, RequestState.Error);
     });
   });
 }

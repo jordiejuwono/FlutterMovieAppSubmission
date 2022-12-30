@@ -27,19 +27,18 @@ import 'package:ditonton/domain/usecases/save_tv_series_watchlist.dart';
 import 'package:ditonton/domain/usecases/save_watchlist.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
 import 'package:ditonton/domain/usecases/search_tv_series.dart';
-import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
-import 'package:ditonton/presentation/provider/movie_list_notifier.dart';
-import 'package:ditonton/presentation/provider/movie_search_notifier.dart';
-import 'package:ditonton/presentation/provider/movie_list/movie_list_cubit.dart';
-import 'package:ditonton/presentation/provider/now_playing_tv_series_notifier.dart';
-import 'package:ditonton/presentation/provider/popular_movies_notifier.dart';
-import 'package:ditonton/presentation/provider/popular_tv_series_notifier.dart';
-import 'package:ditonton/presentation/provider/top_rated_movies_notifier.dart';
-import 'package:ditonton/presentation/provider/top_rated_tv_series_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_series_detail_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_series_list_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_series_search_notifier.dart';
-import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
+import 'package:ditonton/presentation/bloc/movie_detail_notifier.dart';
+import 'package:ditonton/presentation/bloc/movie_search_notifier.dart';
+import 'package:ditonton/presentation/bloc/movie_list/movie_list_cubit.dart';
+import 'package:ditonton/presentation/bloc/now_playing_tv_series_notifier.dart';
+import 'package:ditonton/presentation/bloc/popular_movies_notifier.dart';
+import 'package:ditonton/presentation/bloc/popular_tv_series_notifier.dart';
+import 'package:ditonton/presentation/bloc/top_rated_movies_notifier.dart';
+import 'package:ditonton/presentation/bloc/top_rated_tv_series_notifier.dart';
+import 'package:ditonton/presentation/bloc/tv_series_detail_notifier.dart';
+import 'package:ditonton/presentation/bloc/tv_series_list_notifier.dart';
+import 'package:ditonton/presentation/bloc/tv_series_search_notifier.dart';
+import 'package:ditonton/presentation/bloc/watchlist_movie_notifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 
@@ -49,13 +48,6 @@ void init() {
   // provider
   locator.registerFactory(
     () => MovieListCubit(
-      getNowPlayingMovies: locator(),
-      getPopularMovies: locator(),
-      getTopRatedMovies: locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => MovieListNotifier(
       getNowPlayingMovies: locator(),
       getPopularMovies: locator(),
       getTopRatedMovies: locator(),
