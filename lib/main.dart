@@ -1,5 +1,7 @@
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/utils.dart';
+import 'package:ditonton/presentation/bloc/popular_movies/popular_movies_cubit.dart';
+import 'package:ditonton/presentation/bloc/top_rated_movies/top_rated_movies_cubit.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
 import 'package:ditonton/presentation/pages/movie_detail_page.dart';
 import 'package:ditonton/presentation/pages/home_movie_page.dart';
@@ -15,9 +17,7 @@ import 'package:ditonton/presentation/bloc/movie_detail_notifier.dart';
 import 'package:ditonton/presentation/bloc/movie_search_notifier.dart';
 import 'package:ditonton/presentation/bloc/movie_list/movie_list_cubit.dart';
 import 'package:ditonton/presentation/bloc/now_playing_tv_series_notifier.dart';
-import 'package:ditonton/presentation/bloc/popular_movies_notifier.dart';
 import 'package:ditonton/presentation/bloc/popular_tv_series_notifier.dart';
-import 'package:ditonton/presentation/bloc/top_rated_movies_notifier.dart';
 import 'package:ditonton/presentation/bloc/top_rated_tv_series_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_detail_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_list_notifier.dart';
@@ -42,6 +42,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.locator<MovieListCubit>(),
         ),
+        BlocProvider(
+          create: (_) => di.locator<PopularMoviesCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<TopRatedMoviesCubit>(),
+        ),
       ],
       child: MultiProvider(
         providers: [
@@ -50,12 +56,6 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (_) => di.locator<MovieSearchNotifier>(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => di.locator<TopRatedMoviesNotifier>(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => di.locator<PopularMoviesNotifier>(),
           ),
           ChangeNotifierProvider(
             create: (_) => di.locator<WatchlistMovieNotifier>(),

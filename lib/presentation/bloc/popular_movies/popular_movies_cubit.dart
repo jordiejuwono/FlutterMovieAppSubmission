@@ -11,6 +11,7 @@ class PopularMoviesCubit extends Cubit<PopularMoviesState> {
   }) : super(PopularMoviesState(
           popularMoviesState: RequestState.Empty,
           popularMovies: [],
+          message: "",
         ));
 
   Future<void> fetchPopularMovies() async {
@@ -18,6 +19,7 @@ class PopularMoviesCubit extends Cubit<PopularMoviesState> {
         .copyWith(popularMoviesState: RequestState.Loading, popularMovies: []));
     final result = await getPopularMovies.execute();
     result.fold((failure) {
+      emit(state.copyWith(message: failure.message));
       emit(state.copyWith(popularMoviesState: RequestState.Error));
     }, (result) {
       emit(state.copyWith(

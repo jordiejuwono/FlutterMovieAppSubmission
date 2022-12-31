@@ -5,17 +5,23 @@ import 'package:equatable/equatable.dart';
 class TopRatedMoviesState extends Equatable {
   final RequestState topRatedMoviesState;
   final List<Movie> topRatedMovies;
+  final String message;
 
   TopRatedMoviesState({
     required this.topRatedMoviesState,
     required this.topRatedMovies,
+    required this.message,
   });
 
-  TopRatedMoviesState copyWith(
-      {RequestState? topRatedMoviesState, List<Movie>? topRatedMovies}) {
+  TopRatedMoviesState copyWith({
+    RequestState? topRatedMoviesState,
+    List<Movie>? topRatedMovies,
+    String? message,
+  }) {
     return TopRatedMoviesState(
       topRatedMoviesState: topRatedMoviesState ?? this.topRatedMoviesState,
       topRatedMovies: topRatedMovies ?? this.topRatedMovies,
+      message: message ?? this.message,
     );
   }
 
@@ -23,5 +29,6 @@ class TopRatedMoviesState extends Equatable {
   List<Object?> get props => [
         topRatedMoviesState,
         topRatedMovies,
+        message,
       ];
 }

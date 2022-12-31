@@ -3,7 +3,7 @@ import 'package:ditonton/common/failure.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/usecases/get_top_rated_movies.dart';
-import 'package:ditonton/presentation/bloc/top_rated_movies_notifier.dart';
+import 'package:ditonton/presentation/bloc/top_rated_movies/top_rated_movies_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -13,16 +13,13 @@ import 'top_rated_movies_notifier_test.mocks.dart';
 @GenerateMocks([GetTopRatedMovies])
 void main() {
   late MockGetTopRatedMovies mockGetTopRatedMovies;
-  late TopRatedMoviesNotifier notifier;
+  late TopRatedMoviesCubit bloc;
   late int listenerCallCount;
 
   setUp(() {
     listenerCallCount = 0;
     mockGetTopRatedMovies = MockGetTopRatedMovies();
-    notifier = TopRatedMoviesNotifier(getTopRatedMovies: mockGetTopRatedMovies)
-      ..addListener(() {
-        listenerCallCount++;
-      });
+    bloc = TopRatedMoviesCubit(getTopRatedMovies: mockGetTopRatedMovies);
   });
 
   final tMovie = Movie(
@@ -48,10 +45,9 @@ void main() {
     when(mockGetTopRatedMovies.execute())
         .thenAnswer((_) async => Right(tMovieList));
     // act
-    notifier.fetchTopRatedMovies();
+    bloc.fetchTopRatedMovies();
     // assert
-    expect(notifier.state, RequestState.Loading);
-    expect(listenerCallCount, 1);
+    expect(bloc.state.topRatedMoviesState, RequestState.Loading);
   });
 
   test('should change movies data when data is gotten successfully', () async {
@@ -59,11 +55,10 @@ void main() {
     when(mockGetTopRatedMovies.execute())
         .thenAnswer((_) async => Right(tMovieList));
     // act
-    await notifier.fetchTopRatedMovies();
+    await bloc.fetchTopRatedMovies();
     // assert
-    expect(notifier.state, RequestState.Loaded);
-    expect(notifier.movies, tMovieList);
-    expect(listenerCallCount, 2);
+    expect(bloc.state.topRatedMoviesState, RequestState.Loaded);
+    expect(bloc.state.topRatedMovies, tMovieList);
   });
 
   test('should return error when data is unsuccessful', () async {
@@ -71,10 +66,9 @@ void main() {
     when(mockGetTopRatedMovies.execute())
         .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
     // act
-    await notifier.fetchTopRatedMovies();
+    await bloc.fetchTopRatedMovies();
     // assert
-    expect(notifier.state, RequestState.Error);
-    expect(notifier.message, 'Server Failure');
-    expect(listenerCallCount, 2);
+    expect(bloc.state.topRatedMoviesState, RequestState.Error);
+    expect(bloc.state.message, 'Server Failure');
   });
 }

@@ -31,9 +31,9 @@ import 'package:ditonton/presentation/bloc/movie_detail_notifier.dart';
 import 'package:ditonton/presentation/bloc/movie_search_notifier.dart';
 import 'package:ditonton/presentation/bloc/movie_list/movie_list_cubit.dart';
 import 'package:ditonton/presentation/bloc/now_playing_tv_series_notifier.dart';
-import 'package:ditonton/presentation/bloc/popular_movies_notifier.dart';
+import 'package:ditonton/presentation/bloc/popular_movies/popular_movies_cubit.dart';
 import 'package:ditonton/presentation/bloc/popular_tv_series_notifier.dart';
-import 'package:ditonton/presentation/bloc/top_rated_movies_notifier.dart';
+import 'package:ditonton/presentation/bloc/top_rated_movies/top_rated_movies_cubit.dart';
 import 'package:ditonton/presentation/bloc/top_rated_tv_series_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_detail_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_list_notifier.dart';
@@ -54,6 +54,16 @@ void init() {
     ),
   );
   locator.registerFactory(
+    () => PopularMoviesCubit(
+      getPopularMovies: locator(),
+    ),
+  );
+  locator.registerFactory(
+    () => TopRatedMoviesCubit(
+      getTopRatedMovies: locator(),
+    ),
+  );
+  locator.registerFactory(
     () => MovieDetailNotifier(
       getMovieDetail: locator(),
       getMovieRecommendations: locator(),
@@ -65,16 +75,6 @@ void init() {
   locator.registerFactory(
     () => MovieSearchNotifier(
       searchMovies: locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => PopularMoviesNotifier(
-      locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => TopRatedMoviesNotifier(
-      getTopRatedMovies: locator(),
     ),
   );
   locator.registerFactory(
