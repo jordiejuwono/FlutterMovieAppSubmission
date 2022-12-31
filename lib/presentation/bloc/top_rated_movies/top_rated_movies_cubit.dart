@@ -19,8 +19,8 @@ class TopRatedMoviesCubit extends Cubit<TopRatedMoviesState> {
         topRatedMoviesState: RequestState.Loading, topRatedMovies: []));
     final result = await getTopRatedMovies.execute();
     result.fold((failure) {
-      emit(state.copyWith(message: failure.message));
-      emit(state.copyWith(topRatedMoviesState: RequestState.Error));
+      emit(state.copyWith(
+          topRatedMoviesState: RequestState.Error, message: failure.message));
     }, (result) {
       emit(state.copyWith(
           topRatedMoviesState: RequestState.Loaded, topRatedMovies: result));
