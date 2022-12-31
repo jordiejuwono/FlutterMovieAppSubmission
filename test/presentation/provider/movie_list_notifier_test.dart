@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/usecases/get_now_playing_movies.dart';
@@ -6,6 +7,7 @@ import 'package:ditonton/domain/usecases/get_popular_movies.dart';
 import 'package:ditonton/domain/usecases/get_top_rated_movies.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/presentation/bloc/movie_list/movie_list_cubit.dart';
+import 'package:ditonton/presentation/bloc/movie_list/movie_list_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -48,117 +50,142 @@ void main() {
   final tMovieList = <Movie>[tMovie];
 
   group('now playing movies', () {
-    test('initialState should be Empty', () {
-      expect(bloc.state.nowPlayingState, equals(RequestState.Empty));
-    });
+    blocTest<MovieListCubit, MovieListState>(
+      'should get data from the usecase',
+      build: () {
+        when(mockGetNowPlayingMovies.execute())
+            .thenAnswer((_) async => Right(tMovieList));
+        return bloc;
+      },
+      act: (cubit) => cubit.fetchNowPlayingMovies(),
+      wait: Duration(milliseconds: 100),
+      verify: (bloc) {
+        mockGetNowPlayingMovies.execute();
+      },
+    );
 
-    test('should get data from the usecase', () async {
-      // arrange
-      when(mockGetNowPlayingMovies.execute())
-          .thenAnswer((_) async => Right(tMovieList));
-      // act
-      bloc.fetchNowPlayingMovies();
-      // assert
-      verify(mockGetNowPlayingMovies.execute());
-    });
+    blocTest<MovieListCubit, MovieListState>(
+        'should change state to Loading and Loaded when usecase is called',
+        build: () {
+          when(mockGetNowPlayingMovies.execute())
+              .thenAnswer((_) async => Right(tMovieList));
+          return bloc;
+        },
+        act: (cubit) => cubit.fetchNowPlayingMovies(),
+        wait: Duration(milliseconds: 100),
+        expect: () => [
+              bloc.state.copyWith(
+                nowPlayingState: RequestState.Loading,
+                nowPlayingList: [],
+              ),
+              bloc.state.copyWith(
+                nowPlayingState: RequestState.Loaded,
+                nowPlayingList: tMovieList,
+              ),
+            ]);
 
-    test('should change state to Loading when usecase is called', () {
-      // arrange
-      when(mockGetNowPlayingMovies.execute())
-          .thenAnswer((_) async => Right(tMovieList));
-      // act
-      bloc.fetchNowPlayingMovies();
-      // assert
-      expect(bloc.state.nowPlayingState, RequestState.Loading);
-    });
-
-    test('should change movies when data is gotten successfully', () async {
-      // arrange
-      when(mockGetNowPlayingMovies.execute())
-          .thenAnswer((_) async => Right(tMovieList));
-      // act
-      await bloc.fetchNowPlayingMovies();
-      // assert
-      expect(bloc.state.nowPlayingState, RequestState.Loaded);
-      expect(bloc.state.nowPlayingList, tMovieList);
-    });
-
-    test('should return error when data is unsuccessful', () async {
-      // arrange
-      when(mockGetNowPlayingMovies.execute())
-          .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-      // act
-      await bloc.fetchNowPlayingMovies();
-      // assert
-      expect(bloc.state.nowPlayingState, RequestState.Error);
-    });
+    blocTest<MovieListCubit, MovieListState>(
+        'should return error when data is unsuccessful',
+        build: () {
+          when(mockGetNowPlayingMovies.execute())
+              .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+          return bloc;
+        },
+        act: (cubit) => cubit.fetchNowPlayingMovies(),
+        wait: Duration(milliseconds: 100),
+        expect: () => [
+              bloc.state.copyWith(
+                nowPlayingState: RequestState.Loading,
+                nowPlayingList: [],
+              ),
+              bloc.state.copyWith(
+                nowPlayingState: RequestState.Error,
+                nowPlayingList: [],
+              ),
+            ]);
   });
 
   group('popular movies', () {
-    test('should change state to loading when usecase is called', () async {
-      // arrange
-      when(mockGetPopularMovies.execute())
-          .thenAnswer((_) async => Right(tMovieList));
-      // act
-      bloc.fetchPopularMovies();
-      // assert
-      expect(bloc.state.popularState, RequestState.Loading);
-    });
+    blocTest<MovieListCubit, MovieListState>(
+        'should change state to Loading and Loaded when usecase is called',
+        build: () {
+          when(mockGetPopularMovies.execute())
+              .thenAnswer((_) async => Right(tMovieList));
+          return bloc;
+        },
+        act: (cubit) => cubit.fetchPopularMovies(),
+        wait: Duration(milliseconds: 100),
+        expect: () => [
+              bloc.state.copyWith(
+                popularState: RequestState.Loading,
+                popularList: [],
+              ),
+              bloc.state.copyWith(
+                popularState: RequestState.Loaded,
+                popularList: tMovieList,
+              ),
+            ]);
 
-    test('should change movies data when data is gotten successfully',
-        () async {
-      // arrange
-      when(mockGetPopularMovies.execute())
-          .thenAnswer((_) async => Right(tMovieList));
-      // act
-      await bloc.fetchPopularMovies();
-      // assert
-      expect(bloc.state.popularState, RequestState.Loaded);
-      expect(bloc.state.popularList, tMovieList);
-    });
-
-    test('should return error when data is unsuccessful', () async {
-      // arrange
-      when(mockGetPopularMovies.execute())
-          .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-      // act
-      await bloc.fetchPopularMovies();
-      // assert
-      expect(bloc.state.popularState, RequestState.Error);
-    });
+    blocTest<MovieListCubit, MovieListState>(
+        'should return error when data is unsuccessful',
+        build: () {
+          when(mockGetPopularMovies.execute())
+              .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+          return bloc;
+        },
+        act: (cubit) => cubit.fetchPopularMovies(),
+        wait: Duration(milliseconds: 100),
+        expect: () => [
+              bloc.state.copyWith(
+                popularState: RequestState.Loading,
+                popularList: [],
+              ),
+              bloc.state.copyWith(
+                popularState: RequestState.Error,
+                popularList: [],
+              ),
+            ]);
   });
 
   group('top rated movies', () {
-    test('should change state to loading when usecase is called', () async {
-      // arrange
-      when(mockGetTopRatedMovies.execute())
-          .thenAnswer((_) async => Right(tMovieList));
-      // act
-      bloc.fetchTopRatedMovies();
-      // assert
-      expect(bloc.state.topRatedState, RequestState.Loading);
-    });
+    blocTest<MovieListCubit, MovieListState>(
+        'should change state to Loading and Loaded when usecase is called',
+        build: () {
+          when(mockGetTopRatedMovies.execute())
+              .thenAnswer((_) async => Right(tMovieList));
+          return bloc;
+        },
+        act: (cubit) => cubit.fetchTopRatedMovies(),
+        wait: Duration(milliseconds: 100),
+        expect: () => [
+              bloc.state.copyWith(
+                topRatedState: RequestState.Loading,
+                topRatedList: [],
+              ),
+              bloc.state.copyWith(
+                topRatedState: RequestState.Loaded,
+                topRatedList: tMovieList,
+              ),
+            ]);
 
-    test('should change movies data when data is gotten successfully',
-        () async {
-      // arrange
-      when(mockGetTopRatedMovies.execute())
-          .thenAnswer((_) async => Right(tMovieList));
-      // act
-      await bloc.fetchTopRatedMovies();
-      // assert
-      expect(bloc.state.topRatedState, RequestState.Loaded);
-      expect(bloc.state.topRatedList, tMovieList);
-    });
-
-    test('should return error when data is unsuccessful', () async {
-      // arrange
-      when(mockGetTopRatedMovies.execute())
-          .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-      // act
-      await bloc.fetchTopRatedMovies();
-      // assert
-      expect(bloc.state.topRatedState, RequestState.Error);
-    });
+    blocTest<MovieListCubit, MovieListState>(
+        'should return error when data is unsuccessful',
+        build: () {
+          when(mockGetTopRatedMovies.execute())
+              .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+          return bloc;
+        },
+        act: (cubit) => cubit.fetchTopRatedMovies(),
+        wait: Duration(milliseconds: 100),
+        expect: () => [
+              bloc.state.copyWith(
+                topRatedState: RequestState.Loading,
+                topRatedList: [],
+              ),
+              bloc.state.copyWith(
+                topRatedState: RequestState.Error,
+                topRatedList: [],
+              ),
+            ]);
   });
 }

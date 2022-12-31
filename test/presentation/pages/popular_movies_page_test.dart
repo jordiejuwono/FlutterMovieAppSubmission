@@ -1,10 +1,8 @@
 // import 'package:ditonton/common/state_enum.dart';
 // import 'package:ditonton/domain/entities/movie.dart';
-// import 'package:ditonton/presentation/bloc/popular_movies/popular_movies_cubit.dart';
 // import 'package:ditonton/presentation/pages/popular_movies_page.dart';
 // import 'package:ditonton/presentation/bloc/popular_movies_notifier.dart';
 // import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_test/flutter_test.dart';
 // import 'package:mockito/annotations.dart';
 // import 'package:mockito/mockito.dart';
@@ -12,7 +10,7 @@
 
 // import 'popular_movies_page_test.mocks.dart';
 
-// @GenerateMocks([PopularMoviesCubit])
+// @GenerateMocks([PopularMoviesNotifier])
 // void main() {
 //   late MockPopularMoviesNotifier mockNotifier;
 
@@ -21,12 +19,6 @@
 //   });
 
 //   Widget _makeTestableWidget(Widget body) {
-//     return BlocProvider<PopularMoviesCubit>.value(
-//       value: mockNotifier,
-//       child: MaterialApp(
-//         home: body,
-//       ),
-//     );
 //     return ChangeNotifierProvider<PopularMoviesNotifier>.value(
 //       value: mockNotifier,
 //       child: MaterialApp(
