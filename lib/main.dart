@@ -1,5 +1,6 @@
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/utils.dart';
+import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_cubit.dart';
 import 'package:ditonton/presentation/bloc/popular_movies/popular_movies_cubit.dart';
 import 'package:ditonton/presentation/bloc/top_rated_movies/top_rated_movies_cubit.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
@@ -48,12 +49,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.locator<TopRatedMoviesCubit>(),
         ),
+        BlocProvider(
+          create: (_) => di.locator<MovieDetailCubit>(),
+        ),
       ],
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-            create: (_) => di.locator<MovieDetailNotifier>(),
-          ),
           ChangeNotifierProvider(
             create: (_) => di.locator<MovieSearchNotifier>(),
           ),
