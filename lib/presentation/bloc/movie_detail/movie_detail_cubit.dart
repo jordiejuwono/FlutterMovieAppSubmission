@@ -9,6 +9,9 @@ import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_state.dart'
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MovieDetailCubit extends Cubit<MovieDetailState> {
+  static final watchlistAddSuccessMessage = 'Added to Watchlist';
+  static final watchlistRemoveSuccessMessage = 'Removed from Watchlist';
+
   final GetMovieDetail getMovieDetail;
   final GetMovieRecommendations getMovieRecommendations;
   final GetWatchListStatus getWatchListStatus;

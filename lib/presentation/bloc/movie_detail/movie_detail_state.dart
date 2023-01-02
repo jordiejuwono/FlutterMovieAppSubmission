@@ -4,6 +4,9 @@ import 'package:ditonton/domain/entities/movie_detail.dart';
 import 'package:equatable/equatable.dart';
 
 class MovieDetailState extends Equatable {
+  static const watchlistAddSuccessMessage = 'Added to Watchlist';
+  static const watchlistRemoveSuccessMessage = 'Removed from Watchlist';
+
   final RequestState movieDetailState;
   final RequestState recommendationsState;
   final MovieDetail movieDetail;

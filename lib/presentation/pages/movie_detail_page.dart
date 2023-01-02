@@ -5,7 +5,6 @@ import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/entities/movie_detail.dart';
 import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_cubit.dart';
 import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_state.dart';
-import 'package:ditonton/presentation/bloc/movie_detail_notifier.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,28 +109,39 @@ class DetailContent extends StatelessWidget {
                             ElevatedButton(
                               onPressed: () async {
                                 if (!isAddedWatchlist) {
-                                  await Provider.of<MovieDetailNotifier>(
-                                          context,
-                                          listen: false)
+                                  await context
+                                      .read<MovieDetailCubit>()
                                       .addWatchlist(movie);
+                                  // await Provider.of<MovieDetailNotifier>(
+                                  //         context,
+                                  //         listen: false)
+                                  //     .addWatchlist(movie);
                                 } else {
-                                  await Provider.of<MovieDetailNotifier>(
-                                          context,
-                                          listen: false)
+                                  await context
+                                      .read<MovieDetailCubit>()
                                       .removeFromWatchlist(movie);
+                                  // await Provider.of<MovieDetailNotifier>(
+                                  //         context,
+                                  //         listen: false)
+                                  //     .removeFromWatchlist(movie);
                                 }
 
-                                final message =
-                                    Provider.of<MovieDetailNotifier>(context,
-                                            listen: false)
-                                        .watchlistMessage;
+                                final message = context
+                                    .read<MovieDetailCubit>()
+                                    .state
+                                    .watchlistMessage;
+                                // Provider.of<MovieDetailNotifier>(context,
+                                //         listen: false)
+                                //     .watchlistMessage;
 
-                                if (message ==
-                                        MovieDetailNotifier
-                                            .watchlistAddSuccessMessage ||
-                                    message ==
-                                        MovieDetailNotifier
-                                            .watchlistRemoveSuccessMessage) {
+                                if (message == 'Added to Watchlist'
+                                        // MovieDetailNotifier
+                                        //     .watchlistAddSuccessMessage
+                                        ||
+                                        message == 'Removed from Watchlist'
+                                    // MovieDetailNotifier
+                                    // .watchlistRemoveSuccessMessage
+                                    ) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text(message)));
                                 } else {
