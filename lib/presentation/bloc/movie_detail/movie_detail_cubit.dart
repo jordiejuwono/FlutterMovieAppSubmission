@@ -51,16 +51,19 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
     detailResult.fold((failure) {
       emit(state.copyWith(
           movieDetailState: RequestState.Error, message: failure.message));
-    }, (result) {
-      emit(state.copyWith(recommendationsState: RequestState.Loading));
+    }, (detailResult) {
       emit(state.copyWith(
-          movieDetailState: RequestState.Loaded, movieDetail: result));
+        recommendationsState: RequestState.Loading,
+        movieDetailState: RequestState.Loaded,
+        movieDetail: detailResult,
+      ));
       recommendationsResult.fold((failure) {
         emit(state.copyWith(recommendationsState: RequestState.Error));
-      }, (result) {
+      }, (recommendationsResult) {
         emit(state.copyWith(
-            recommendationsState: RequestState.Loaded,
-            movieRecommendations: result));
+          recommendationsState: RequestState.Loaded,
+          movieRecommendations: recommendationsResult,
+        ));
       });
     });
   }
