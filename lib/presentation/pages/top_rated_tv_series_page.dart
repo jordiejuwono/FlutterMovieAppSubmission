@@ -1,7 +1,10 @@
 import 'package:ditonton/common/state_enum.dart';
+import 'package:ditonton/presentation/bloc/top_rated_tv_series/top_rated_tv_series_cubit.dart';
+import 'package:ditonton/presentation/bloc/top_rated_tv_series/top_rated_tv_series_state.dart';
 import 'package:ditonton/presentation/bloc/top_rated_tv_series_notifier.dart';
 import 'package:ditonton/presentation/widgets/tv_series_card_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class TopRatedTvSeriesPage extends StatefulWidget {
@@ -16,8 +19,7 @@ class _TopRatedTvSeriesPageState extends State<TopRatedTvSeriesPage> {
   @override
   void initState() {
     Future.microtask(
-      () => Provider.of<TopRatedTvSeriesNotifier>(context, listen: false)
-          .fetchTopRatedTvSeries(),
+      () => context.read<TopRatedTvSeriesCubit>().fetchTopRatedTvSeries(),
     );
     super.initState();
   }
@@ -30,24 +32,24 @@ class _TopRatedTvSeriesPageState extends State<TopRatedTvSeriesPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer<TopRatedTvSeriesNotifier>(
-            builder: (context, value, child) {
-          if (value.topRatedState == RequestState.Loading) {
+        child: BlocBuilder<TopRatedTvSeriesCubit, TopRatedTvSeriesState>(
+            builder: (context, state) {
+          if (state.topRatedState == RequestState.Loading) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else if (value.topRatedState == RequestState.Loaded) {
+          } else if (state.topRatedState == RequestState.Loaded) {
             return ListView.builder(
               itemBuilder: (context, index) {
-                final tvSeries = value.topRatedTvSeries[index];
+                final tvSeries = state.topRatedList[index];
                 return TvSeriesCardList(tvSeries: tvSeries);
               },
-              itemCount: value.topRatedTvSeries.length,
+              itemCount: state.topRatedList.length,
             );
           } else {
             return Center(
               key: Key('error_message'),
-              child: Text(value.message),
+              child: Text(state.message),
             );
           }
         }),

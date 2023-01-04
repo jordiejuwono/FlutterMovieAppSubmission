@@ -3,24 +3,26 @@ import 'package:dartz/dartz.dart';
 import 'package:ditonton/common/failure.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/domain/entities/tv_series.dart';
-import 'package:ditonton/domain/usecases/get_top_rated_tv_series.dart';
-import 'package:ditonton/presentation/bloc/top_rated_tv_series/top_rated_tv_series_cubit.dart';
-import 'package:ditonton/presentation/bloc/top_rated_tv_series/top_rated_tv_series_state.dart';
+import 'package:ditonton/domain/usecases/get_now_playing_tv_series.dart';
+import 'package:ditonton/presentation/bloc/now_playing_tv_series/now_playing_tv_series_cubit.dart';
+import 'package:ditonton/presentation/bloc/now_playing_tv_series/now_playing_tv_series_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'top_rated_tv_series_notifier_test.mocks.dart';
+import 'now_playing_tv_series_cubit_test.mocks.dart';
 
 @GenerateMocks([
-  GetTopRatedTvSeries,
+  GetNowPlayingTvSeries,
 ])
 void main() {
-  late TopRatedTvSeriesCubit bloc;
-  late MockGetTopRatedTvSeries mockGetTopRatedTvSeries;
+  late NowPlayingTvSeriesCubit bloc;
+  late MockGetNowPlayingTvSeries mockGetNowPlayingTvSeries;
   setUp(() {
-    mockGetTopRatedTvSeries = MockGetTopRatedTvSeries();
-    bloc = TopRatedTvSeriesCubit(getTopRatedTvSeries: mockGetTopRatedTvSeries);
+    mockGetNowPlayingTvSeries = MockGetNowPlayingTvSeries();
+    bloc = NowPlayingTvSeriesCubit(
+      getNowPlayingTvSeries: mockGetNowPlayingTvSeries,
+    );
   });
 
   final id = 1;
@@ -42,54 +44,54 @@ void main() {
 
   final tvSeriesList = <TvSeries>[tvSeries];
 
-  group('Top Rated Tv Series', () {
-    blocTest<TopRatedTvSeriesCubit, TopRatedTvSeriesState>(
+  group('Now Playing Tv Series', () {
+    blocTest<NowPlayingTvSeriesCubit, NowPlayingTvSeriesState>(
       'should return data from usecase',
       build: () {
-        when(mockGetTopRatedTvSeries.execute())
+        when(mockGetNowPlayingTvSeries.execute())
             .thenAnswer((_) async => Right(tvSeriesList));
         return bloc;
       },
-      act: (cubit) => cubit.fetchTopRatedTvSeries(),
+      act: (cubit) => cubit.fetchNowPlayingTvSeries(),
       verify: (cubit) {
-        mockGetTopRatedTvSeries.execute();
+        mockGetNowPlayingTvSeries.execute();
       },
     );
 
-    blocTest<TopRatedTvSeriesCubit, TopRatedTvSeriesState>(
+    blocTest<NowPlayingTvSeriesCubit, NowPlayingTvSeriesState>(
         'should change state to loading then loaded when function called',
         build: () {
-          when(mockGetTopRatedTvSeries.execute())
+          when(mockGetNowPlayingTvSeries.execute())
               .thenAnswer((_) async => Right(tvSeriesList));
           return bloc;
         },
-        act: (cubit) => cubit.fetchTopRatedTvSeries(),
+        act: (cubit) => cubit.fetchNowPlayingTvSeries(),
         expect: () => [
               bloc.state.copyWith(
-                topRatedState: RequestState.Loading,
-                topRatedList: [],
+                nowPlayingState: RequestState.Loading,
+                nowPlayingList: [],
               ),
               bloc.state.copyWith(
-                topRatedState: RequestState.Loaded,
-                topRatedList: tvSeriesList,
+                nowPlayingState: RequestState.Loaded,
+                nowPlayingList: tvSeriesList,
               )
             ]);
 
-    blocTest<TopRatedTvSeriesCubit, TopRatedTvSeriesState>(
+    blocTest<NowPlayingTvSeriesCubit, NowPlayingTvSeriesState>(
         'should return failure and error state when fetch now playing failed',
         build: () {
-          when(mockGetTopRatedTvSeries.execute())
+          when(mockGetNowPlayingTvSeries.execute())
               .thenAnswer((_) async => Left(ServerFailure('Failed')));
           return bloc;
         },
-        act: (cubit) => cubit.fetchTopRatedTvSeries(),
+        act: (cubit) => cubit.fetchNowPlayingTvSeries(),
         expect: () => [
               bloc.state.copyWith(
-                topRatedState: RequestState.Loading,
+                nowPlayingState: RequestState.Loading,
                 message: '',
               ),
               bloc.state.copyWith(
-                topRatedState: RequestState.Error,
+                nowPlayingState: RequestState.Error,
                 message: 'Failed',
               )
             ]);
