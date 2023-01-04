@@ -30,14 +30,11 @@ import 'package:ditonton/domain/usecases/search_tv_series.dart';
 import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_cubit.dart';
 import 'package:ditonton/presentation/bloc/movie_list/movie_list_cubit.dart';
 import 'package:ditonton/presentation/bloc/now_playing_tv_series/now_playing_tv_series_cubit.dart';
-import 'package:ditonton/presentation/bloc/now_playing_tv_series_notifier.dart';
 import 'package:ditonton/presentation/bloc/popular_movies/popular_movies_cubit.dart';
 import 'package:ditonton/presentation/bloc/popular_tv_series/popular_tv_series_cubit.dart';
-import 'package:ditonton/presentation/bloc/popular_tv_series_notifier.dart';
 import 'package:ditonton/presentation/bloc/search_movie/search_movie_bloc.dart';
 import 'package:ditonton/presentation/bloc/top_rated_movies/top_rated_movies_cubit.dart';
 import 'package:ditonton/presentation/bloc/top_rated_tv_series/top_rated_tv_series_cubit.dart';
-import 'package:ditonton/presentation/bloc/top_rated_tv_series_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_detail_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_list/tv_series_list_cubit.dart';
 import 'package:ditonton/presentation/bloc/tv_series_search_notifier.dart';
@@ -120,21 +117,6 @@ void init() {
       removeTvSeriesWatchlist: locator(),
       saveTvSeriesWatchlist: locator(),
       getTvSeriesRecommendations: locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => PopularTvSeriesNotifier(
-      getPopularTvSeries: locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => TopRatedTvSeriesNotifier(
-      getTopRatedTvSeries: locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => NowPlayingTvSeriesNotifier(
-      getNowPlayingTvSeries: locator(),
     ),
   );
 

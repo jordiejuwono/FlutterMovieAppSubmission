@@ -20,9 +20,6 @@ import 'package:ditonton/presentation/pages/top_rated_tv_series_page.dart';
 import 'package:ditonton/presentation/pages/tv_series_detail_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
 import 'package:ditonton/presentation/bloc/movie_list/movie_list_cubit.dart';
-import 'package:ditonton/presentation/bloc/now_playing_tv_series_notifier.dart';
-import 'package:ditonton/presentation/bloc/popular_tv_series_notifier.dart';
-import 'package:ditonton/presentation/bloc/top_rated_tv_series_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_detail_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_search_notifier.dart';
 import 'package:ditonton/presentation/bloc/watchlist_movie_notifier.dart';
@@ -80,15 +77,6 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (_) => di.locator<TvSeriesDetailNotifier>(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => di.locator<PopularTvSeriesNotifier>(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => di.locator<TopRatedTvSeriesNotifier>(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => di.locator<NowPlayingTvSeriesNotifier>(),
           ),
         ],
         child: MaterialApp(
