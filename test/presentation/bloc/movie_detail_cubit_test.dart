@@ -94,6 +94,7 @@ void main() {
         _arrangeUsecase();
         return bloc;
       },
+      act: (cubit) => cubit.fetchMovieDetails(tId),
       verify: (bloc) {
         mockGetMovieDetail.execute(tId);
         mockGetMovieRecommendations.execute(tId);

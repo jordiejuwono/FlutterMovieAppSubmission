@@ -28,7 +28,8 @@ class TvSeriesListCubit extends Cubit<TvSeriesListState> {
         .copyWith(nowPlayingState: RequestState.Loading, nowPlayingList: []));
     final result = await getNowPlayingTvSeries.execute();
     result.fold((failure) {
-      emit(state.copyWith(nowPlayingState: RequestState.Error));
+      emit(state.copyWith(
+          nowPlayingState: RequestState.Error, message: failure.message));
     }, (result) {
       emit(state.copyWith(
           nowPlayingState: RequestState.Loaded, nowPlayingList: result));
