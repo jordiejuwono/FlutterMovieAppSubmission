@@ -210,6 +210,25 @@ void main() {
         )
       ],
     );
+
+    blocTest<MovieDetailCubit, MovieDetailState>(
+      'should update watchlist status when add watchlist failed',
+      build: () {
+        when(mockSaveWatchlist.execute(testMovieDetail))
+            .thenAnswer((_) async => Left(DatabaseFailure('Failed')));
+        when(mockGetWatchlistStatus.execute(testMovieDetail.id))
+            .thenAnswer((_) async => false);
+        return bloc;
+      },
+      act: (cubit) => cubit.addWatchlist(testMovieDetail),
+      verify: (cubit) => mockGetWatchlistStatus.execute(testMovieDetail.id),
+      expect: () => [
+        bloc.state.copyWith(
+          isAddedToWatchlist: false,
+          watchlistMessage: 'Failed',
+        ),
+      ],
+    );
   });
 
   // group('Watchlist', () {
