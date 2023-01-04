@@ -110,159 +110,111 @@ void main() {
                 message: 'Failed',
               )
             ]);
-    // test('Should return request state empty first', () {
-    //   expect(provider.nowPlayingState, RequestState.Empty);
-    //   expect(listenerCount, 0);
-    // });
-
-    // test('Should return data from usecase', () async {
-    //   // arrange
-    //   when(mockGetNowPlayingTvSeries.execute())
-    //       .thenAnswer((_) async => Right(tvSeriesList));
-    //   // act
-    //   await provider.fetchNowPlayingTvSeries();
-    //   // assert
-    //   verify(mockGetNowPlayingTvSeries.execute());
-    // });
-
-    // test('Should change state to Loading when function called', () {
-    //   // arrange
-    //   when(mockGetNowPlayingTvSeries.execute())
-    //       .thenAnswer((_) async => Right(tvSeriesList));
-    //   // act
-    //   provider.fetchNowPlayingTvSeries();
-    //   // assert
-    //   expect(provider.nowPlayingState, RequestState.Loading);
-    //   expect(listenerCount, 1);
-    // });
-
-    // test('Should return now playing list and Loaded State when function called',
-    //     () async {
-    //   when(mockGetNowPlayingTvSeries.execute())
-    //       .thenAnswer((_) async => Right(tvSeriesList));
-    //   // act
-    //   await provider.fetchNowPlayingTvSeries();
-    //   // assert
-    //   expect(provider.nowPlayingState, RequestState.Loaded);
-    //   expect(provider.nowPlayingTvSeries, tvSeriesList);
-    //   expect(listenerCount, 2);
-    // });
-
-    // test('Should return Server Failure and Error State when function called',
-    //     () async {
-    //   when(mockGetNowPlayingTvSeries.execute())
-    //       .thenAnswer((_) async => Left(ServerFailure("Failure")));
-    //   // act
-    //   await provider.fetchNowPlayingTvSeries();
-    //   // assert
-    //   expect(provider.nowPlayingState, RequestState.Error);
-    //   expect(provider.message, "Failure");
-    //   expect(listenerCount, 2);
-    // });
   });
 
-  // group('Popular Tv Series', () {
-  //   test('Should return request state empty first', () {
-  //     expect(provider.popularState, RequestState.Empty);
-  //     expect(listenerCount, 0);
-  //   });
+  group('Popular Tv Series', () {
+    blocTest<TvSeriesListCubit, TvSeriesListState>(
+      'should return data from usecase',
+      build: () {
+        when(mockGetPopularTvSeries.execute())
+            .thenAnswer((_) async => Right(tvSeriesList));
+        return bloc;
+      },
+      act: (cubit) => cubit.fetchPopularTvSeries(),
+      verify: (cubit) {
+        mockGetPopularTvSeries.execute();
+      },
+    );
 
-  //   test('Should return data from usecase', () async {
-  //     // arrange
-  //     when(mockGetPopularTvSeries.execute())
-  //         .thenAnswer((_) async => Right(tvSeriesList));
-  //     // act
-  //     await provider.fetchPopularTvSeries();
-  //     // assert
-  //     verify(mockGetPopularTvSeries.execute());
-  //   });
+    blocTest<TvSeriesListCubit, TvSeriesListState>(
+        'should change state to loading then loaded when function called',
+        build: () {
+          when(mockGetPopularTvSeries.execute())
+              .thenAnswer((_) async => Right(tvSeriesList));
+          return bloc;
+        },
+        act: (cubit) => cubit.fetchPopularTvSeries(),
+        expect: () => [
+              bloc.state.copyWith(
+                popularState: RequestState.Loading,
+                popularList: [],
+              ),
+              bloc.state.copyWith(
+                popularState: RequestState.Loaded,
+                popularList: tvSeriesList,
+              )
+            ]);
 
-  //   test('Should change state to Loading when function called', () {
-  //     // arrange
-  //     when(mockGetPopularTvSeries.execute())
-  //         .thenAnswer((_) async => Right(tvSeriesList));
-  //     // act
-  //     provider.fetchPopularTvSeries();
-  //     // assert
-  //     expect(provider.popularState, RequestState.Loading);
-  //     expect(listenerCount, 1);
-  //   });
+    blocTest<TvSeriesListCubit, TvSeriesListState>(
+        'should return failure and error state when fetch now playing failed',
+        build: () {
+          when(mockGetPopularTvSeries.execute())
+              .thenAnswer((_) async => Left(ServerFailure('Failed')));
+          return bloc;
+        },
+        act: (cubit) => cubit.fetchPopularTvSeries(),
+        expect: () => [
+              bloc.state.copyWith(
+                popularState: RequestState.Loading,
+                message: '',
+              ),
+              bloc.state.copyWith(
+                popularState: RequestState.Error,
+                message: 'Failed',
+              )
+            ]);
+  });
 
-  //   test(
-  //       'Should return popular Tv Series list and Loaded State when function called',
-  //       () async {
-  //     when(mockGetPopularTvSeries.execute())
-  //         .thenAnswer((_) async => Right(tvSeriesList));
-  //     // act
-  //     await provider.fetchPopularTvSeries();
-  //     // assert
-  //     expect(provider.popularState, RequestState.Loaded);
-  //     expect(provider.popularTvSeries, tvSeriesList);
-  //     expect(listenerCount, 2);
-  //   });
+  group('Top Rated Tv Series', () {
+    blocTest<TvSeriesListCubit, TvSeriesListState>(
+      'should return data from usecase',
+      build: () {
+        when(mockGetTopRatedTvSeries.execute())
+            .thenAnswer((_) async => Right(tvSeriesList));
+        return bloc;
+      },
+      act: (cubit) => cubit.fetchTopRatedTvSeries(),
+      verify: (cubit) {
+        mockGetTopRatedTvSeries.execute();
+      },
+    );
 
-  //   test('Should return Server Failure and Error State when function called',
-  //       () async {
-  //     when(mockGetPopularTvSeries.execute())
-  //         .thenAnswer((_) async => Left(ServerFailure("Failure")));
-  //     // act
-  //     await provider.fetchPopularTvSeries();
-  //     // assert
-  //     expect(provider.popularState, RequestState.Error);
-  //     expect(provider.message, "Failure");
-  //     expect(listenerCount, 2);
-  //   });
-  // });
+    blocTest<TvSeriesListCubit, TvSeriesListState>(
+        'should change state to loading then loaded when function called',
+        build: () {
+          when(mockGetTopRatedTvSeries.execute())
+              .thenAnswer((_) async => Right(tvSeriesList));
+          return bloc;
+        },
+        act: (cubit) => cubit.fetchTopRatedTvSeries(),
+        expect: () => [
+              bloc.state.copyWith(
+                topRatedState: RequestState.Loading,
+                topRatedList: [],
+              ),
+              bloc.state.copyWith(
+                topRatedState: RequestState.Loaded,
+                topRatedList: tvSeriesList,
+              )
+            ]);
 
-  // group('Top Rated Tv Series', () {
-  //   test('Should return request state empty first', () {
-  //     expect(provider.topRatedState, RequestState.Empty);
-  //     expect(listenerCount, 0);
-  //   });
-
-  //   test('Should return data from usecase', () async {
-  //     // arrange
-  //     when(mockGetTopRatedTvSeries.execute())
-  //         .thenAnswer((_) async => Right(tvSeriesList));
-  //     // act
-  //     await provider.fetchTopRatedTvSeries();
-  //     // assert
-  //     verify(mockGetTopRatedTvSeries.execute());
-  //   });
-
-  //   test('Should change state to Loading when function called', () {
-  //     // arrange
-  //     when(mockGetTopRatedTvSeries.execute())
-  //         .thenAnswer((_) async => Right(tvSeriesList));
-  //     // act
-  //     provider.fetchTopRatedTvSeries();
-  //     // assert
-  //     expect(provider.topRatedState, RequestState.Loading);
-  //     expect(listenerCount, 1);
-  //   });
-
-  //   test('Should return top rated list and Loaded State when function called',
-  //       () async {
-  //     when(mockGetTopRatedTvSeries.execute())
-  //         .thenAnswer((_) async => Right(tvSeriesList));
-  //     // act
-  //     await provider.fetchTopRatedTvSeries();
-  //     // assert
-  //     expect(provider.topRatedState, RequestState.Loaded);
-  //     expect(provider.topRatedTvSeries, tvSeriesList);
-  //     expect(listenerCount, 2);
-  //   });
-
-  //   test('Should return Server Failure and Error State when function called',
-  //       () async {
-  //     when(mockGetTopRatedTvSeries.execute())
-  //         .thenAnswer((_) async => Left(ServerFailure("Failure")));
-  //     // act
-  //     await provider.fetchTopRatedTvSeries();
-  //     // assert
-  //     expect(provider.topRatedState, RequestState.Error);
-  //     expect(provider.message, "Failure");
-  //     expect(listenerCount, 2);
-  //   });
-  // });
+    blocTest<TvSeriesListCubit, TvSeriesListState>(
+        'should return failure and error state when fetch now playing failed',
+        build: () {
+          when(mockGetTopRatedTvSeries.execute())
+              .thenAnswer((_) async => Left(ServerFailure('Failed')));
+          return bloc;
+        },
+        act: (cubit) => cubit.fetchTopRatedTvSeries(),
+        expect: () => [
+              bloc.state.copyWith(
+                topRatedState: RequestState.Loading,
+                message: '',
+              ),
+              bloc.state.copyWith(
+                topRatedState: RequestState.Error,
+                message: 'Failed',
+              )
+            ]);
+  });
 }
