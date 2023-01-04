@@ -3,6 +3,8 @@ import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/type_helper.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/entities/tv_series.dart';
+import 'package:ditonton/presentation/bloc/tv_series_list/tv_series_list_cubit.dart';
+import 'package:ditonton/presentation/bloc/tv_series_list/tv_series_list_state.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
 import 'package:ditonton/presentation/pages/movie_detail_page.dart';
 import 'package:ditonton/presentation/pages/now_playing_tv_series_page.dart';
@@ -31,10 +33,11 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
   void initState() {
     super.initState();
     Future.microtask(
-        () => Provider.of<TvSeriesListNotifier>(context, listen: false)
-          ..fetchNowPlayingTvSeries()
-          ..fetchPopularTvSeries()
-          ..fetchTopRatedTvSeries());
+      () => context.read<TvSeriesListCubit>()
+        ..fetchNowPlayingTvSeries()
+        ..fetchPopularTvSeries()
+        ..fetchTopRatedTvSeries(),
+    );
     Future.microtask(
       () => context.read<MovieListCubit>()
         ..fetchNowPlayingMovies()
@@ -190,15 +193,14 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                 Navigator.pushNamed(context, NowPlayingTvSeriesPage.ROUTE_NAME);
               },
             ),
-            Consumer<TvSeriesListNotifier>(
-              builder: (context, value, child) {
-                final state = value.nowPlayingState;
-                if (state == RequestState.Loading) {
+            BlocBuilder<TvSeriesListCubit, TvSeriesListState>(
+              builder: (context, state) {
+                if (state.nowPlayingState == RequestState.Loading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (state == RequestState.Loaded) {
-                  return TvSeriesList(value.nowPlayingTvSeries);
+                } else if (state.nowPlayingState == RequestState.Loaded) {
+                  return TvSeriesList(state.nowPlayingList);
                 } else {
                   return Text('Failed');
                 }
@@ -210,15 +212,14 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                 Navigator.pushNamed(context, PopularTvSeriesPage.ROUTE_NAME);
               },
             ),
-            Consumer<TvSeriesListNotifier>(
-              builder: (context, value, child) {
-                final state = value.popularState;
-                if (state == RequestState.Loading) {
+            BlocBuilder<TvSeriesListCubit, TvSeriesListState>(
+              builder: (context, state) {
+                if (state.popularState == RequestState.Loading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (state == RequestState.Loaded) {
-                  return TvSeriesList(value.popularTvSeries);
+                } else if (state.popularState == RequestState.Loaded) {
+                  return TvSeriesList(state.popularList);
                 } else {
                   return Text('Failed');
                 }
@@ -230,15 +231,14 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                 Navigator.pushNamed(context, TopRatedTvSeriesPage.ROUTE_NAME);
               },
             ),
-            Consumer<TvSeriesListNotifier>(
-              builder: (context, value, child) {
-                final state = value.topRatedState;
-                if (state == RequestState.Loading) {
+            BlocBuilder<TvSeriesListCubit, TvSeriesListState>(
+              builder: (context, state) {
+                if (state.topRatedState == RequestState.Loading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (state == RequestState.Loaded) {
-                  return TvSeriesList(value.topRatedTvSeries);
+                } else if (state.topRatedState == RequestState.Loaded) {
+                  return TvSeriesList(state.topRatedList);
                 } else {
                   return Text('Failed');
                 }
