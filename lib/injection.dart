@@ -34,6 +34,7 @@ import 'package:ditonton/presentation/bloc/movie_list/movie_list_cubit.dart';
 import 'package:ditonton/presentation/bloc/now_playing_tv_series_notifier.dart';
 import 'package:ditonton/presentation/bloc/popular_movies/popular_movies_cubit.dart';
 import 'package:ditonton/presentation/bloc/popular_tv_series_notifier.dart';
+import 'package:ditonton/presentation/bloc/search_movie/search_movie_bloc.dart';
 import 'package:ditonton/presentation/bloc/top_rated_movies/top_rated_movies_cubit.dart';
 import 'package:ditonton/presentation/bloc/top_rated_tv_series_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_detail_notifier.dart';
@@ -71,6 +72,11 @@ void init() {
       getWatchListStatus: locator(),
       saveWatchlist: locator(),
       removeWatchlist: locator(),
+    ),
+  );
+  locator.registerFactory(
+    () => SearchMovieBloc(
+      searchMovies: locator(),
     ),
   );
   locator.registerFactory(
