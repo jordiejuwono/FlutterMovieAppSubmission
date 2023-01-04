@@ -4,8 +4,11 @@ import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/domain/entities/tv_details.dart';
 import 'package:ditonton/domain/entities/tv_genre.dart';
 import 'package:ditonton/domain/entities/tv_series.dart';
+import 'package:ditonton/presentation/bloc/tv_series_detail/tv_series_detail_cubit.dart';
+import 'package:ditonton/presentation/bloc/tv_series_detail/tv_series_detail_state.dart';
 import 'package:ditonton/presentation/bloc/tv_series_detail_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -25,36 +28,30 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-      () => Provider.of<TvSeriesDetailNotifier>(
-        context,
-        listen: false,
-      )
-        ..fetchTvSeriesDetail(widget.id)
-        ..loadWatchlistStatus(widget.id)
-        ..fetchTvSeriesRecommendations(widget.id),
-    );
+    Future.microtask(() => context.read<TvSeriesDetailCubit>()
+      ..fetchTvSeriesDetail(widget.id)
+      ..loadWatchlistStatus(widget.id));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<TvSeriesDetailNotifier>(
-        builder: (context, value, child) {
-          if (value.tvSeriesState == RequestState.Loading) {
+      body: BlocBuilder<TvSeriesDetailCubit, TvSeriesDetailState>(
+        builder: (context, state) {
+          if (state.tvSeriesDetailState == RequestState.Loading) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else if (value.tvSeriesState == RequestState.Loaded) {
-            final tvSeries = value.tvSeries;
+          } else if (state.tvSeriesDetailState == RequestState.Loaded) {
+            final tvSeries = state.tvSeriesDetail;
             return SafeArea(
                 child: DetailContent(
               tvDetails: tvSeries,
-              isAddedToWatchlist: value.isAddedToWatchlist,
-              recommendations: value.tvSeriesRecommendations,
+              isAddedToWatchlist: state.isAddedToWatchlist,
+              recommendations: state.tvSeriesRecommendations,
             ));
           } else {
-            return Text(value.message);
+            return Text(state.message);
           }
         },
       ),
@@ -123,26 +120,24 @@ class DetailContent extends StatelessWidget {
                           ElevatedButton(
                             onPressed: () async {
                               if (!isAddedToWatchlist) {
-                                await Provider.of<TvSeriesDetailNotifier>(
-                                        context,
-                                        listen: false)
-                                    .addTvSeriesWatchlist(tvDetails!);
+                                await context
+                                    .read<TvSeriesDetailCubit>()
+                                    .addWatchlist(tvDetails!);
                               } else {
-                                await Provider.of<TvSeriesDetailNotifier>(
-                                        context,
-                                        listen: false)
-                                    .removeTvSeriesFromWatchlist(tvDetails!);
+                                await context
+                                    .read<TvSeriesDetailCubit>()
+                                    .removeFromWatchlist(tvDetails!);
                               }
 
-                              final message =
-                                  Provider.of<TvSeriesDetailNotifier>(context,
-                                          listen: false)
-                                      .watchlistMessage;
+                              final message = context
+                                  .read<TvSeriesDetailCubit>()
+                                  .state
+                                  .watchlistMessage;
                               if (message ==
-                                      TvSeriesDetailNotifier
+                                      TvSeriesDetailCubit
                                           .watchlistAddSuccessMessage ||
                                   message ==
-                                      TvSeriesDetailNotifier
+                                      TvSeriesDetailCubit
                                           .watchlistRemoveSuccessMessage) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(message)));
@@ -215,14 +210,14 @@ class DetailContent extends StatelessWidget {
                             'Recommendations',
                             style: kHeading6,
                           ),
-                          Consumer<TvSeriesDetailNotifier>(
-                              builder: (context, value, child) {
-                            if (value.tvSeriesRecommendationsState ==
+                          BlocBuilder<TvSeriesDetailCubit, TvSeriesDetailState>(
+                              builder: (context, state) {
+                            if (state.recommendationsState ==
                                 RequestState.Loading) {
                               return Center(
                                 child: CircularProgressIndicator(),
                               );
-                            } else if (value.tvSeriesRecommendationsState ==
+                            } else if (state.recommendationsState ==
                                 RequestState.Loaded) {
                               return Container(
                                 height: 150,
@@ -266,9 +261,9 @@ class DetailContent extends StatelessWidget {
                                   itemCount: recommendations.length,
                                 ),
                               );
-                            } else if (value.tvSeriesRecommendationsState ==
+                            } else if (state.recommendationsState ==
                                 RequestState.Error) {
-                              return Text(value.message);
+                              return Text(state.message);
                             } else {
                               return Container();
                             }

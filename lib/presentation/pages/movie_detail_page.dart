@@ -134,14 +134,12 @@ class DetailContent extends StatelessWidget {
                                 //         listen: false)
                                 //     .watchlistMessage;
 
-                                if (message == 'Added to Watchlist'
-                                        // MovieDetailNotifier
-                                        //     .watchlistAddSuccessMessage
-                                        ||
-                                        message == 'Removed from Watchlist'
-                                    // MovieDetailNotifier
-                                    // .watchlistRemoveSuccessMessage
-                                    ) {
+                                if (message ==
+                                        MovieDetailCubit
+                                            .watchlistAddSuccessMessage ||
+                                    message ==
+                                        MovieDetailCubit
+                                            .watchlistRemoveSuccessMessage) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text(message)));
                                 } else {
