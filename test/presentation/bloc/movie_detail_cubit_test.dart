@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
+import 'package:ditonton/common/failure.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/entities/movie_detail.dart';
 import 'package:ditonton/domain/usecases/get_movie_detail.dart';
@@ -100,7 +101,7 @@ void main() {
     );
 
     blocTest<MovieDetailCubit, MovieDetailState>(
-      'should change state to Loading then Loaded when usecase is called',
+      'should change movie detail and recommendations state to Loading then Loaded when usecase is called',
       build: () {
         _arrangeUsecase();
         return bloc;
@@ -127,6 +128,27 @@ void main() {
         ),
       ],
     );
+
+    blocTest<MovieDetailCubit, MovieDetailState>(
+        'should return error when get detail or recommendation movies failed',
+        build: () {
+          when(mockGetMovieDetail.execute(tId))
+              .thenAnswer((_) async => Left(ServerFailure('Failed')));
+          when(mockGetMovieRecommendations.execute(tId))
+              .thenAnswer((_) async => Left(ServerFailure('Failed')));
+          return bloc;
+        },
+        act: (cubit) => cubit.fetchMovieDetails(tId),
+        expect: () => [
+              bloc.state.copyWith(
+                movieDetailState: RequestState.Loading,
+                message: '',
+              ),
+              bloc.state.copyWith(
+                movieDetailState: RequestState.Error,
+                message: 'Failed',
+              ),
+            ]);
     // test('should get data from the usecase', () async {
     //   // arrange
     //   // act
