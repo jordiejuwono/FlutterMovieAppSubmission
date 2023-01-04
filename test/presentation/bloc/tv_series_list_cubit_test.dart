@@ -15,7 +15,7 @@ import 'package:mockito/mockito.dart';
 
 import 'now_playing_tv_series_cubit_test.mocks.dart';
 import 'popular_tv_series_cubit_test.mocks.dart';
-import 'top_rated_tv_series_notifier_test.mocks.dart';
+import 'top_rated_tv_series_cubit_test.mocks.dart';
 
 // import 'tv_series_list_bloc_test.mocks.dart';
 
