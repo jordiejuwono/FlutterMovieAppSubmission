@@ -28,8 +28,6 @@ import 'package:ditonton/domain/usecases/save_watchlist.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
 import 'package:ditonton/domain/usecases/search_tv_series.dart';
 import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_cubit.dart';
-import 'package:ditonton/presentation/bloc/movie_detail_notifier.dart';
-import 'package:ditonton/presentation/bloc/movie_search_notifier.dart';
 import 'package:ditonton/presentation/bloc/movie_list/movie_list_cubit.dart';
 import 'package:ditonton/presentation/bloc/now_playing_tv_series_notifier.dart';
 import 'package:ditonton/presentation/bloc/popular_movies/popular_movies_cubit.dart';
@@ -39,7 +37,6 @@ import 'package:ditonton/presentation/bloc/top_rated_movies/top_rated_movies_cub
 import 'package:ditonton/presentation/bloc/top_rated_tv_series_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_detail_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_list/tv_series_list_cubit.dart';
-import 'package:ditonton/presentation/bloc/tv_series_list_notifier.dart';
 import 'package:ditonton/presentation/bloc/tv_series_search_notifier.dart';
 import 'package:ditonton/presentation/bloc/watchlist_movie_notifier.dart';
 import 'package:http/http.dart' as http;
@@ -91,13 +88,6 @@ void init() {
     () => WatchlistMovieNotifier(
       getWatchlistMovies: locator(),
       getTvSeriesWatchlist: locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => TvSeriesListNotifier(
-      getNowPlayingTvSeries: locator(),
-      getPopularTvSeries: locator(),
-      getTopRatedTvSeries: locator(),
     ),
   );
   locator.registerFactory(

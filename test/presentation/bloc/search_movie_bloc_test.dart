@@ -4,7 +4,6 @@ import 'package:ditonton/common/failure.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
-import 'package:ditonton/presentation/bloc/movie_search_notifier.dart';
 import 'package:ditonton/presentation/bloc/search_movie/search_movie_bloc.dart';
 import 'package:ditonton/presentation/bloc/search_movie/search_movie_event.dart';
 import 'package:ditonton/presentation/bloc/search_movie/search_movie_state.dart';

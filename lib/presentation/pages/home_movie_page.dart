@@ -18,10 +18,8 @@ import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/presentation/bloc/movie_list/movie_list_cubit.dart';
 import 'package:ditonton/presentation/bloc/movie_list/movie_list_state.dart';
-import 'package:ditonton/presentation/bloc/tv_series_list_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 class HomeMoviePage extends StatefulWidget {
   @override

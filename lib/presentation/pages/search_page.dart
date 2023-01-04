@@ -1,7 +1,6 @@
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/common/type_helper.dart';
-import 'package:ditonton/presentation/bloc/movie_search_notifier.dart';
 import 'package:ditonton/presentation/bloc/search_movie/search_movie_bloc.dart';
 import 'package:ditonton/presentation/bloc/search_movie/search_movie_event.dart';
 import 'package:ditonton/presentation/bloc/search_movie/search_movie_state.dart';
