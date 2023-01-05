@@ -40,7 +40,6 @@ import 'package:ditonton/presentation/bloc/top_rated_tv_series/top_rated_tv_seri
 import 'package:ditonton/presentation/bloc/tv_series_detail/tv_series_detail_cubit.dart';
 import 'package:ditonton/presentation/bloc/tv_series_list/tv_series_list_cubit.dart';
 import 'package:ditonton/presentation/bloc/watchlist/watchlist_cubit.dart';
-import 'package:ditonton/presentation/bloc/watchlist_movie_notifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'package:http/io_client.dart';
@@ -48,10 +47,17 @@ import 'package:http/io_client.dart';
 final locator = GetIt.instance;
 
 Future<void> init() async {
+  await _ioClient();
+  _registerDomains();
+}
+
+Future<void> _ioClient() async {
   // ssl pinning
   IOClient ioClient = await SslPinning.ioClient;
   locator.registerLazySingleton<IOClient>(() => ioClient);
+}
 
+void _registerDomains() {
   // provider
   locator.registerFactory(
     () => MovieListCubit(
@@ -122,12 +128,6 @@ Future<void> init() async {
   );
   locator.registerFactory(
     () => WatchlistCubit(
-      getWatchlistMovies: locator(),
-      getTvSeriesWatchlist: locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => WatchlistMovieNotifier(
       getWatchlistMovies: locator(),
       getTvSeriesWatchlist: locator(),
     ),
