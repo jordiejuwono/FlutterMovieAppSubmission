@@ -1,8 +1,5 @@
 import 'package:ditonton/common/state_enum.dart';
-import 'package:ditonton/domain/usecases/search_movies.dart';
 import 'package:ditonton/domain/usecases/search_tv_series.dart';
-import 'package:ditonton/presentation/bloc/search_movie/search_movie_event.dart';
-import 'package:ditonton/presentation/bloc/search_movie/search_movie_state.dart';
 import 'package:ditonton/presentation/bloc/search_tv_series/search_tv_series_event.dart';
 import 'package:ditonton/presentation/bloc/search_tv_series/search_tv_series_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

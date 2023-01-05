@@ -10,18 +10,18 @@ class SearchTvSeriesState extends Equatable {
 
   SearchTvSeriesState({
     required this.searchTvSeriesState,
-    required this.moviesList,
+    required this.tvSeriesList,
     required this.message,
   });
 
   SearchTvSeriesState copyWith({
     RequestState? searchTvSeriesState,
-    List<Movie>? moviesList,
+    List<TvSeries>? tvSeriesList,
     String? message,
   }) {
     return SearchTvSeriesState(
       searchTvSeriesState: searchTvSeriesState ?? this.searchTvSeriesState,
-      moviesList: moviesList ?? this.moviesList,
+      tvSeriesList: tvSeriesList ?? this.tvSeriesList,
       message: message ?? this.message,
     );
   }
@@ -29,7 +29,7 @@ class SearchTvSeriesState extends Equatable {
   @override
   List<Object?> get props => [
         searchTvSeriesState,
-        moviesList,
+        tvSeriesList,
         message,
       ];
 }

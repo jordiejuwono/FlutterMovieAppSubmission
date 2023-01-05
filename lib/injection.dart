@@ -38,7 +38,6 @@ import 'package:ditonton/presentation/bloc/top_rated_movies/top_rated_movies_cub
 import 'package:ditonton/presentation/bloc/top_rated_tv_series/top_rated_tv_series_cubit.dart';
 import 'package:ditonton/presentation/bloc/tv_series_detail/tv_series_detail_cubit.dart';
 import 'package:ditonton/presentation/bloc/tv_series_list/tv_series_list_cubit.dart';
-import 'package:ditonton/presentation/bloc/tv_series_search_notifier.dart';
 import 'package:ditonton/presentation/bloc/watchlist_movie_notifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
@@ -118,11 +117,6 @@ void init() {
     () => WatchlistMovieNotifier(
       getWatchlistMovies: locator(),
       getTvSeriesWatchlist: locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => TvSeriesSearchNotifier(
-      searchTvSeries: locator(),
     ),
   );
 

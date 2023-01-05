@@ -22,7 +22,6 @@ import 'package:ditonton/presentation/pages/top_rated_tv_series_page.dart';
 import 'package:ditonton/presentation/pages/tv_series_detail_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
 import 'package:ditonton/presentation/bloc/movie_list/movie_list_cubit.dart';
-import 'package:ditonton/presentation/bloc/tv_series_search_notifier.dart';
 import 'package:ditonton/presentation/bloc/watchlist_movie_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -78,9 +77,6 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(
             create: (_) => di.locator<WatchlistMovieNotifier>(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => di.locator<TvSeriesSearchNotifier>(),
           ),
         ],
         child: MaterialApp(
