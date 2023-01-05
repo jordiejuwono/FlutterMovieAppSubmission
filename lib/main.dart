@@ -5,6 +5,7 @@ import 'package:ditonton/presentation/bloc/now_playing_tv_series/now_playing_tv_
 import 'package:ditonton/presentation/bloc/popular_movies/popular_movies_cubit.dart';
 import 'package:ditonton/presentation/bloc/popular_tv_series/popular_tv_series_cubit.dart';
 import 'package:ditonton/presentation/bloc/search_movie/search_movie_bloc.dart';
+import 'package:ditonton/presentation/bloc/search_tv_series/search_tv_series_bloc.dart';
 import 'package:ditonton/presentation/bloc/top_rated_movies/top_rated_movies_cubit.dart';
 import 'package:ditonton/presentation/bloc/top_rated_tv_series/top_rated_tv_series_cubit.dart';
 import 'package:ditonton/presentation/bloc/tv_series_detail/tv_series_detail_cubit.dart';
@@ -68,6 +69,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => di.locator<TvSeriesDetailCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<SearchTvSeriesBloc>(),
         ),
       ],
       child: MultiProvider(
