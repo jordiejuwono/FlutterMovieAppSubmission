@@ -1,3 +1,4 @@
+import 'package:ditonton/common/ssl_pinning.dart';
 import 'package:ditonton/data/datasources/db/database_helper.dart';
 import 'package:ditonton/data/datasources/movie_local_data_source.dart';
 import 'package:ditonton/data/datasources/movie_remote_data_source.dart';
@@ -42,10 +43,14 @@ import 'package:ditonton/presentation/bloc/watchlist/watchlist_cubit.dart';
 import 'package:ditonton/presentation/bloc/watchlist_movie_notifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
+import 'package:http/io_client.dart';
 
 final locator = GetIt.instance;
 
-void init() {
+Future<void> init() async {
+  // ssl pinning
+  IOClient ioClient = await SslPinning.ioClient;
+  locator.registerLazySingleton<IOClient>(() => ioClient);
   // provider
   locator.registerFactory(
     () => MovieListCubit(
