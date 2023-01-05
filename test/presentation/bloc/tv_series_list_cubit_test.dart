@@ -6,7 +6,6 @@ import 'package:ditonton/domain/entities/tv_series.dart';
 import 'package:ditonton/domain/usecases/get_now_playing_tv_series.dart';
 import 'package:ditonton/domain/usecases/get_popular_tv_series.dart';
 import 'package:ditonton/domain/usecases/get_top_rated_tv_series.dart';
-import 'package:ditonton/injection.dart';
 import 'package:ditonton/presentation/bloc/tv_series_list/tv_series_list_cubit.dart';
 import 'package:ditonton/presentation/bloc/tv_series_list/tv_series_list_state.dart';
 import 'package:flutter_test/flutter_test.dart';
