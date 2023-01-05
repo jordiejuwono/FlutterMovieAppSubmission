@@ -51,6 +51,7 @@ Future<void> init() async {
   // ssl pinning
   IOClient ioClient = await SslPinning.ioClient;
   locator.registerLazySingleton<IOClient>(() => ioClient);
+
   // provider
   locator.registerFactory(
     () => MovieListCubit(
