@@ -6,6 +6,8 @@ import 'package:ditonton/common/failure.dart';
 import 'package:ditonton/data/models/tvseries/tv_series_details.dart';
 import 'package:ditonton/data/models/tvseries/tv_series_results.dart';
 import 'package:ditonton/data/repositories/tv_series_repository_impl.dart';
+import 'package:ditonton/domain/entities/tv_genre.dart';
+import 'package:ditonton/domain/entities/tv_season.dart';
 import 'package:ditonton/domain/entities/tv_series.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -197,7 +199,9 @@ void main() {
       backdropPath: 'backdropPath',
       createdBy: ['createdBy'],
       episodeRunTime: [1],
-      genres: [],
+      genres: [
+        Genre(id: 1, name: 'Drama'),
+      ],
       homepage: 'homePage',
       id: 1,
       name: 'tvSeriesTitle',
@@ -212,7 +216,16 @@ void main() {
       originalName: 'originalName',
       popularity: 1,
       productionCountries: [],
-      seasons: [],
+      seasons: [
+        Season(
+            airDate: DateTime(0),
+            episodeCount: 0,
+            id: 1,
+            name: "season",
+            overview: "overview",
+            posterPath: "path",
+            seasonNumber: 1),
+      ],
       status: 'status',
       tagline: 'tagline',
       type: 'type',

@@ -4,6 +4,8 @@ import 'package:ditonton/domain/entities/genre.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/entities/movie_detail.dart';
 import 'package:ditonton/domain/entities/tv_details.dart';
+import 'package:ditonton/domain/entities/tv_genre.dart';
+import 'package:ditonton/domain/entities/tv_season.dart';
 import 'package:ditonton/domain/entities/tv_series.dart';
 
 final testMovie = Movie(
@@ -80,7 +82,9 @@ final testTvSeriesDetail = TvDetails(
   backdropPath: 'backdropPath',
   createdBy: ['createdBy'],
   episodeRunTime: [1],
-  genres: [],
+  genres: [
+    TvGenre(id: 1, name: 'Drama'),
+  ],
   homepage: 'homePage',
   id: 1,
   name: 'tvSeriesTitle',
@@ -95,7 +99,16 @@ final testTvSeriesDetail = TvDetails(
   originalName: 'originalName',
   popularity: 1,
   productionCountries: [],
-  seasons: [],
+  seasons: [
+    TvSeason(
+        airDate: DateTime(0),
+        episodeCount: 0,
+        id: 1,
+        name: "season",
+        overview: "overview",
+        posterPath: "path",
+        seasonNumber: 1),
+  ],
   status: 'status',
   tagline: 'tagline',
   type: 'type',
